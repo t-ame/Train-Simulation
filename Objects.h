@@ -7,17 +7,27 @@
 
 #include <string>
 
+class Station;
+
 class Train {
 public:
+    Train();
+    void arriveAtStation(Station station, int time);
+    void checkForDelay();
+
 private:
     int numPassengers;
     int efficiencyGrade;
+    int delay;
 };
 
 
 class Station {
 public:
+    Station(std::string n, int time, int dist, bool end, bool event);
+
 private:
+    std::string name;
     int timeToNext;
     int distFromCenter;
     bool endStation;
@@ -27,6 +37,9 @@ private:
 
 class Line {
 public:
+    Line(std::string n);
+    void genStations();
+
 private:
     std::string name;
     Station stations[];
