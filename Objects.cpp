@@ -32,6 +32,13 @@ Line::Line(std::string n) {
 void Line::genStations() {
     std::pair<std::string, int> SPAIR;
 
+    typedef std::pair<string, int> spair;
+    typedef std::vector<spair> spairvec;
+    std::map<string, spairvec> lineInfo;
+
+    //to insert into map,
+    //spairvec v = ….///line info
+    //lineInfo[this->name] = v;
 
     // Hard code
     SPAIR red[] =
