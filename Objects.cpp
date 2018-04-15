@@ -29,7 +29,8 @@ Station::Station(string n, int time, int dist, bool end, bool event) {
 
 
 Line::Line(string n) {
-
+    name = n;
+    genStations();
 }
 
 void Line::genStations() {
@@ -56,5 +57,12 @@ void Line::genStations() {
     lineInfo["Green"] = green;
 
     // given a line string, generate array/vec of stations
-    
+    vector<Station> sVec;
+    for (int i = 0; i < lineInfo[name].size(); i++) {
+        string n = lineInfo[name][i].first;
+        int t = lineInfo[name][i].second;
+//        int d =
+//
+//        sVec.push_back(new Station(lineInfo[name][i].first, ))
+    }
 }

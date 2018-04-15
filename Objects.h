@@ -6,6 +6,7 @@
 #define MARTA_SIM_OBJECTS_H
 
 #include <string>
+#include <vector>
 
 class Station;
 
@@ -42,7 +43,7 @@ public:
 
 private:
     std::string name;
-//    Station stations[];
+    std::vector<Station> stations;
 };
 
 
