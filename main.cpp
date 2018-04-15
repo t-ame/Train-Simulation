@@ -1,6 +1,11 @@
 #include <iostream>
 #include <string>
+#include <utility>
+#include <map>
+#include <vector>
 #include "MakeEvent.h"
+
+using namespace std;
 
 void sayHello() {
     std::cout << "sayHello\n";
@@ -42,26 +47,43 @@ private:
 
 
 int main() {
-    Event* a = MakeEvent(&sayHello);
-    Event* b = MakeEvent(&sayGoodbye, 2);
-    Event* c = MakeEvent(&sayHello2, "Bobby", "Alice");
-    Event* d = MakeEvent(&sumIt, 5, 3, 1, 4);
+//    Event* a = MakeEvent(&sayHello);
+//    Event* b = MakeEvent(&sayGoodbye, 2);
+//    Event* c = MakeEvent(&sayHello2, "Bobby", "Alice");
+//    Event* d = MakeEvent(&sumIt, 5, 3, 1, 4);
+//
+//    Dog* myDog = new Dog("Barney");
+//
+//    Event* e = MakeEvent(&Dog::woof, myDog);
+//    Event* f = MakeEvent(&Dog::barkNTimes, myDog, 5);
+//    Event* g = MakeEvent(&Dog::addThem, myDog, 2.2, 7.0);
+//
+//    std::cout << "Start the invokes\n";
+//
+//    a->Invoke();
+//    b->Invoke();
+//    c->Invoke();
+//    d->Invoke();
+//    e->Invoke();
+//    f->Invoke();
+//    g->Invoke();
 
-    Dog* myDog = new Dog("Barney");
 
-    Event* e = MakeEvent(&Dog::woof, myDog);
-    Event* f = MakeEvent(&Dog::barkNTimes, myDog, 5);
-    Event* g = MakeEvent(&Dog::addThem, myDog, 2.2, 7.0);
+    typedef pair<string, int> spair;
+    typedef vector<spair> spairvec;
+    map<string, spairvec> lineInfo;
 
-    std::cout << "Start the invokes\n";
+    //to insert into map,
+    //spairvec v = ….///line info
+    //lineInfo[this->name] = v;
 
-    a->Invoke();
-    b->Invoke();
-    c->Invoke();
-    d->Invoke();
-    e->Invoke();
-    f->Invoke();
-    g->Invoke();
+    // Hard code
+    spairvec red;
+    red.push_back(spair("test", 4));
+
+    cout << red[0].first << endl;
+    cout << red[0].second << endl;
+
 
 
     std::cout << "Hello, World!" << std::endl;

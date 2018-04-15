@@ -42,7 +42,7 @@ public:
 
 private:
     std::string name;
-    Station stations[];
+//    Station stations[];
 };
 
 

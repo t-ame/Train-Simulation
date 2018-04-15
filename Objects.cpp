@@ -5,6 +5,9 @@
 #include "Objects.h"
 #include <utility>
 #include <map>
+#include <vector>
+
+using namespace std;
 
 
 Train::Train() {
@@ -20,27 +23,38 @@ void Train::checkForDelay() {
 }
 
 
-Station::Station(std::string n, int time, int dist, bool end, bool event) {
+Station::Station(string n, int time, int dist, bool end, bool event) {
 
 }
 
 
-Line::Line(std::string n) {
+Line::Line(string n) {
 
 }
 
 void Line::genStations() {
-    std::pair<std::string, int> SPAIR;
 
-    typedef std::pair<string, int> spair;
-    typedef std::vector<spair> spairvec;
-    std::map<string, spairvec> lineInfo;
+    typedef pair<string, int> spair;
+    typedef vector<spair> spairvec;
+    map<string, spairvec> lineInfo;
 
     //to insert into map,
     //spairvec v = ….///line info
     //lineInfo[this->name] = v;
 
     // Hard code
-    SPAIR red[] =
+    spairvec red;
+    red.push_back(spair("test", 4));
+    // TODO: hard-code all of this
+    spairvec gold;
+    spairvec blue;
+    spairvec green;
 
+    lineInfo["Red"] = red;
+    lineInfo["Gold"] = gold;
+    lineInfo["Blue"] = blue;
+    lineInfo["Green"] = green;
+
+    // given a line string, generate array/vec of stations
+    
 }
