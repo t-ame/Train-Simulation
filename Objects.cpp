@@ -6,6 +6,8 @@
 #include <utility>
 #include <map>
 #include <vector>
+#include <cmath>
+#include <iostream>
 
 using namespace std;
 
@@ -23,13 +25,13 @@ void Train::checkForDelay() {
 }
 
 
-Station::Station(string n, int time, int dist, bool end, bool event) {
+Station::Station(string n, int time, int dist, bool end, bool event) : name(n), timeToNext(time), distFromCenter(dist),
+    endStation(end), eventStation(event) {}
 
-}
 
-
-Line::Line(string n) {
+Line::Line(string n, string ev) {
     name = n;
+    eventStation = ev;
     genStations();
 }
 
@@ -108,7 +110,7 @@ void Line::genStations() {
     green.push_back(spair("Vine City", 1));
     green.push_back(spair("Omni", 1));
     green.push_back(spair("Five Points", 1));
-    green.push_back(spair("Georgia State", 2))
+    green.push_back(spair("Georgia State", 2));
     green.push_back(spair("King Memorial", 3));
     green.push_back(spair("Inman Park", 2));
     green.push_back(spair("Edgewood-Candler Park", 0));
@@ -119,12 +121,28 @@ void Line::genStations() {
     lineInfo["Green"] = green;
 
     // given a line string, generate array/vec of stations
-    vector<Station> sVec;
-    for (int i = 0; i < lineInfo[name].size(); i++) {
-        string n = lineInfo[name][i].first;
-        int t = lineInfo[name][i].second;
-//        int d =
-//
-//        sVec.push_back(new Station(lineInfo[name][i].first, ))
+    auto mit = lineInfo.find(name);
+    int centerInd = 0;
+    for (int i = 0; i < mit->second.size(); i++) {
+        if (mit->second[i].first == "Five Points")
+            centerInd = i;
     }
+
+    for (int i = 0; i < mit->second.size(); i++) {
+        string n = mit->second[i].first;
+        int t = mit->second[i].second;
+        int d = abs(i - centerInd);
+        bool end = false;
+        if (i == 0 || i == mit->second.size() - 1)
+            end = true;
+        bool ev = false;
+        if (name == eventStation)
+            ev = true;
+
+        stations.push_back(Station(n, t, d, end, ev));
+    }
+}
+
+std::vector<Station> Line::getStations() {
+    return stations;
 }

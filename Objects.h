@@ -27,7 +27,6 @@ class Station {
 public:
     Station(std::string n, int time, int dist, bool end, bool event);
 
-private:
     std::string name;
     int timeToNext;
     int distFromCenter;
@@ -38,12 +37,14 @@ private:
 
 class Line {
 public:
-    Line(std::string n);
+    Line(std::string n, std::string ev = "");
     void genStations();
+    std::vector<Station> getStations();
 
 private:
     std::string name;
     std::vector<Station> stations;
+    std::string eventStation;
 };
 
 

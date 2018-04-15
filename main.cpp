@@ -4,6 +4,7 @@
 #include <map>
 #include <vector>
 #include "MakeEvent.h"
+#include "Objects.h"
 
 using namespace std;
 
@@ -68,22 +69,10 @@ int main() {
 //    f->Invoke();
 //    g->Invoke();
 
-
-    typedef pair<string, int> spair;
-    typedef vector<spair> spairvec;
-    map<string, spairvec> lineInfo;
-
-    //to insert into map,
-    //spairvec v = ….///line info
-    //lineInfo[this->name] = v;
-
-    // Hard code
-    spairvec red;
-    red.push_back(spair("test", 4));
-
-    cout << red[0].first << endl;
-    cout << red[0].second << endl;
-
+    Line line("Green");
+    vector<Station> s = line.getStations();
+    for (int i = 0; i < s.size(); i++)
+        cout << s[i].name << endl;
 
 
     std::cout << "Hello, World!" << std::endl;
