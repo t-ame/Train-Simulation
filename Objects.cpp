@@ -34,7 +34,7 @@ Line::Line(string n) {
 
 void Line::genStations() {
 
-    typedef pair<string, int> spair;
+    typedef pair<string, int> spair; //<station name, time to next station>
     typedef vector<spair> spairvec;
     map<string, spairvec> lineInfo;
 
@@ -44,11 +44,73 @@ void Line::genStations() {
 
     // Hard code
     spairvec red;
-    red.push_back(spair("test", 4));
-    // TODO: hard-code all of this
+    red.push_back(spair("Airport", 2));
+    red.push_back(spair("College Park", 3));
+    red.push_back(spair("East Point", 3));
+    red.push_back(spair("Lakewood", 2));
+    red.push_back(spair("Oakland City", 2));
+    red.push_back(spair("West End", 2));
+    red.push_back(spair("Garnett", 3));
+    red.push_back(spair("Five Points", 1));
+    red.push_back(spair("Peachtree Center", 1));
+    red.push_back(spair("Civic Center", 2));
+    red.push_back(spair("North Ave", 1));
+    red.push_back(spair("Midtown", 2));
+    red.push_back(spair("Arts Center", 4));
+    red.push_back(spair("Lindbergh", 4));
+    red.push_back(spair("Buckhead", 5));
+    red.push_back(spair("Medical Center", 2));
+    red.push_back(spair("Dunwoody", 2));
+    red.push_back(spair("Sandy Springs", 2));
+    red.push_back(spair("North Springs", 0));
+
     spairvec gold;
+    gold.push_back(spair("Airport", 2));
+    gold.push_back(spair("College Park", 3));
+    gold.push_back(spair("East Point", 3));
+    gold.push_back(spair("Lakewood", 2));
+    gold.push_back(spair("Oakland City", 2));
+    gold.push_back(spair("West End", 2));
+    gold.push_back(spair("Garnett", 3));
+    gold.push_back(spair("Five Points", 1));
+    gold.push_back(spair("Peachtree Center", 1));
+    gold.push_back(spair("Civic Center", 2));
+    gold.push_back(spair("North Ave", 1));
+    gold.push_back(spair("Midtown", 2));
+    gold.push_back(spair("Arts Center", 4));
+    gold.push_back(spair("Lindbergh", 3));
+    gold.push_back(spair("Lenox", 3));
+    gold.push_back(spair("Brookhaven",4 ));
+    gold.push_back(spair("Chamblee", 3));
+    gold.push_back(spair("Doraville", 0));
+
     spairvec blue;
+    blue.push_back(spair("Hamilton E. Holmes", 3));
+    blue.push_back(spair("West Lake", 3));
+    blue.push_back(spair("Ashby", 1));
+    blue.push_back(spair("Vine City", 1));
+    blue.push_back(spair("Omni", 1));
+    blue.push_back(spair("Five Points", 1));
+    blue.push_back(spair("Georgia State", 2));
+    blue.push_back(spair("King Memorial", 3));
+    blue.push_back(spair("Inman Park", 2));
+    blue.push_back(spair("Edgewood-Candler Park", 3));
+    blue.push_back(spair("East Lake", 3));
+    blue.push_back(spair("Decatur", 4));
+    blue.push_back(spair("Avondale", 3));
+    blue.push_back(spair("Kensington", 2));
+    blue.push_back(spair("Indian Creek", 0));
+
     spairvec green;
+    green.push_back(spair("Bankhead", 4));
+    green.push_back(spair("Ashby", 1));
+    green.push_back(spair("Vine City", 1));
+    green.push_back(spair("Omni", 1));
+    green.push_back(spair("Five Points", 1));
+    green.push_back(spair("Georgia State", 2))
+    green.push_back(spair("King Memorial", 3));
+    green.push_back(spair("Inman Park", 2));
+    green.push_back(spair("Edgewood-Candler Park", 0));
 
     lineInfo["Red"] = red;
     lineInfo["Gold"] = gold;
