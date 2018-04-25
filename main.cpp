@@ -69,12 +69,14 @@ int main() {
 //    f->Invoke();
 //    g->Invoke();
 
-    Line line("Green");
+    Line line("Gold");
     vector<Station> s = line.getStations();
-    for (int i = 0; i < s.size(); i++)
-        cout << s[i].name << endl;
+    Train t1;
+    int time = 1020; // 6:50
+    for (int i = 0; i < s.size(); i++) {
+        t1.arriveAtStation(s[i], time);
+        time += s[i].timeToNext;
+    }
 
-
-    std::cout << "Hello, World!" << std::endl;
     return 0;
 }

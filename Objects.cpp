@@ -11,13 +11,64 @@
 
 using namespace std;
 
+int MAX_DISTFROMCENTER = 13;
+int BASE_BOARDING = 33;
+float UNLOAD_SCALING = 0.30;
+float EVENT_SCALING = 0.15;
+float DIST_SCALING = 0.25;
+typedef pair<int, int> rpair;
+rpair morning = rpair(420, 540);
+rpair evening = rpair(960, 1140);
+float RUSH_ON_SCALING = 0.6;
+float RUSH_OFF_SCALING = 0.05;
 
 Train::Train() {
-
+    numPassengers = 0;
+    efficiencyGrade = 1.0;
+    delay = 0;
 }
 
-void Train::arriveAtStation(Station station, int time) {
+void Train::arriveAtStation(Station& station, int time) {
+    // init numOn
+    int numOn =  BASE_BOARDING - BASE_BOARDING * station.distFromCenter / (MAX_DISTFROMCENTER + 1);
+    int numOff = numPassengers * UNLOAD_SCALING + numPassengers * DIST_SCALING * (1 - station.distFromCenter / (MAX_DISTFROMCENTER + 1));
 
+    // check for event
+    if (station.eventStation) {
+        int eventStart = station.eventTime.first;
+        int eventEnd = station.eventTime.second;
+        int arriveRange = 60;
+        int leaveRange = 20;
+        if (eventStart - arriveRange <= time && time <= eventStart) {
+            numOff += EVENT_SCALING * numOff;
+        } else if (eventEnd <= time && time <= eventEnd + leaveRange) {
+            numOn += EVENT_SCALING * numOn;
+        }
+    }
+
+    // check time of day
+    if (morning.first <= time && time <= morning.second) {
+        numOn += numOn * RUSH_ON_SCALING;
+        numOn -= numOn * abs(station.distFromCenter - MAX_DISTFROMCENTER / 2) / ((MAX_DISTFROMCENTER + 1) / 2) * 0.8;
+        numOff += RUSH_OFF_SCALING * numOff * 1.0 / (station.distFromCenter + 1);
+    } else if (evening.first <= time && time <= evening.second) {
+        numOn += RUSH_ON_SCALING * numOn * 1.0 / (station.distFromCenter + 1);
+        numOff += RUSH_OFF_SCALING * numOff;
+        numOff -= numOff * abs(station.distFromCenter - MAX_DISTFROMCENTER / 2) / ((MAX_DISTFROMCENTER + 1) / 2) * 0.5;
+    }
+
+    if (numOff > numPassengers) {
+        numOff = numPassengers;
+    }
+
+    // check if end station
+    if (station.endStation && numPassengers != 0) {
+        numOn = 0;
+        numOff = numPassengers;
+    }
+
+    numPassengers = numPassengers - numOff + numOn;
+    cout << "Time: " << time << " numOn: " << numOn << " numOff: " << numOff << " numPassengers: " << numPassengers << " Name: " << station.name << endl;
 }
 
 void Train::checkForDelay() {
@@ -25,13 +76,15 @@ void Train::checkForDelay() {
 }
 
 
-Station::Station(string n, int time, int dist, bool end, bool event) : name(n), timeToNext(time), distFromCenter(dist),
-    endStation(end), eventStation(event) {}
+Station::Station(string n, int time, int dist, bool end, bool event, int start, int stop) : name(n), timeToNext(time), distFromCenter(dist),
+    endStation(end), eventStation(event), eventTime(pair<int, int>(start, stop)) {}
 
 
-Line::Line(string n, string ev) {
+Line::Line(string n, string ev, int start, int stop) {
     name = n;
     eventStation = ev;
+    eventStart = start;
+    eventStop = stop;
     genStations();
 }
 
@@ -120,6 +173,15 @@ void Line::genStations() {
     lineInfo["Blue"] = blue;
     lineInfo["Green"] = green;
 
+    if (name == "Red")
+        MAX_DISTFROMCENTER = 11;
+    else if (name == "Gold")
+        MAX_DISTFROMCENTER = 10;
+    else if (name == "Blue")
+        MAX_DISTFROMCENTER = 9;
+    else if (name == "Green")
+        MAX_DISTFROMCENTER = 4;
+
     // given a line string, generate array/vec of stations
     auto mit = lineInfo.find(name);
     int centerInd = 0;
@@ -139,7 +201,7 @@ void Line::genStations() {
         if (name == eventStation)
             ev = true;
 
-        stations.push_back(Station(n, t, d, end, ev));
+        stations.push_back(Station(n, t, d, end, ev, eventStart, eventStop));
     }
 }
 
