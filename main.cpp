@@ -15,9 +15,10 @@ using namespace std;
  * * * * * * * * * * * * * *
  */
 
-//TODO: event support (ask user)
-//TODO: feedback structure
+//TODO: event support
 //TODO: make numbers more believable
+//TODO: show more data to the user
+//TODO: make printing times prettier
 
 string getLineNameInput() {
     // Take input and make sure it's valid.
@@ -93,27 +94,28 @@ void giveFeedback(vector<eventLog*>* evH, string lineName) {
     int deboardSum = 0;
 
     for (auto event : eventHist) {
-//        if (lastEvent->stationName == event->stationName) {
-//            cout << "Trip " << tripNum << ": " << tripStart << " ----> " << event->stationName << endl;
-//            cout << "   " << tripStartTime/60 << ":" << tripStartTime%60 << " to " << event->time/60 << ":" << event->time%60;
-//            cout << "   Passengers/station: " << (tripPassengerSum / tripStationCount);
-//            cout << "   Boarding passengers/station: " << (tripBoardSum / tripStationCount);
-//            cout << "   Deboarding passengers/station: " << (tripDeboardSum / tripStationCount) << endl;
-//
-//            tripNum++;
-//            tripStationCount = 0;
-//            tripPassengerSum = 0;
-//            tripBoardSum = 0;
-//            tripDeboardSum = 0;
-//            tripStartTime = event->time;
-//            tripStart = event->stationName;
-//        }
-//
-//        tripStationCount++;
-//        tripBoardSum += event->numBoard;
-//        tripDeboardSum += event->numDeboard;
-//        tripPassengerSum += event->numPassengers;
-//        lastEvent = event;
+        if (lastEvent->stationName == event->stationName) {
+            cout << "Trip " << setfill('0') << setw(2) << tripNum << ": " << tripStart << " ----> " << event->stationName;
+            cout << " | " << setfill('0') << setw(2) << tripStartTime/60 << ":" << setfill('0') << setw(2) << tripStartTime%60;
+            cout << " to " << setfill('0') << setw(2) << event->time/60 << ":" << setfill('0') << setw(2) << event->time%60;
+            cout << " | Passengers/station: " << (tripPassengerSum / tripStationCount);
+            cout << " | Boarding passengers/station: " << (tripBoardSum / tripStationCount);
+            cout << " | Deboarding passengers/station: " << (tripDeboardSum / tripStationCount) << endl;
+
+            tripNum++;
+            tripStationCount = 0;
+            tripPassengerSum = 0;
+            tripBoardSum = 0;
+            tripDeboardSum = 0;
+            tripStartTime = event->time;
+            tripStart = event->stationName;
+        }
+
+        tripStationCount++;
+        tripBoardSum += event->numBoard;
+        tripDeboardSum += event->numDeboard;
+        tripPassengerSum += event->numPassengers;
+        lastEvent = event;
 
         stationCount++;
         boardSum += event->numBoard;
@@ -121,7 +123,7 @@ void giveFeedback(vector<eventLog*>* evH, string lineName) {
         passengerSum += event->numPassengers;
     }
 
-    cout << "MARTA " << lineName << " Line 24 hour simulation results:" << endl;
+    cout << endl << "MARTA " << lineName << " Line 24 hour simulation results:" << endl;
     cout << "   Passengers/station: " << (passengerSum / stationCount) << endl;
     cout << "   Boarding passengers/station: " << (boardSum / stationCount) << endl;
     cout << "   Deboarding passengers/station: " << (deboardSum / stationCount) << endl << endl;
@@ -144,10 +146,13 @@ void giveFeedback(vector<eventLog*>* evH, string lineName) {
         }
     } while (!valid);
 
-    cout << "Verbose output:" << endl;
-    for (auto event : eventHist) {
-        cout << "Time: " << event->time << " numOn: " << event->numBoard << " numOff: " << event->numDeboard << " numPassengers: ";
-        cout << event->numPassengers << " Name: " << event->stationName << endl;
+    if (verbose) {
+        cout << "Verbose output:" << endl;
+        for (auto event : eventHist) {
+            cout << "Time: " << event->time << " numOn: " << event->numBoard << " numOff: " << event->numDeboard
+                 << " numPassengers: ";
+            cout << event->numPassengers << " Name: " << event->stationName << endl;
+        }
     }
 }
 
@@ -164,6 +169,8 @@ int main() {
     int time = getTimeInput(lineName);
 
     cout << "Starting simulation..." << endl;
+    // run simulation and get back list of every event that occurred.
+    // this is a vector of struct pointers. See Objects.h for the data elements of the eventLog struct.
     vector<eventLog*> eventHist = runSimulation(lineName, time);
     giveFeedback(&eventHist, lineName);
 
