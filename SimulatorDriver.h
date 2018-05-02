@@ -8,26 +8,51 @@
 #include "MakeEvent.h"
 #include "Objects.h"
 
-std::queue<Event*>* buildEventQueue(Train* t, Line* l, int time) {
-    std::vector<Station> stations = l->getStations();
+/*
+ * * * * * * * * * * * * * *
+ * MARTA Simulator         *
+ * ECE4122                 *
+ *                         *
+ * Toya Amechi             *
+ * Noah Roberts            *
+ * Jackson Sheu            *
+ * * * * * * * * * * * * * *
+ */
 
+std::queue<Event*>* buildEventQueue(Train* t, Line* l, int time) {
+    std::vector<Station>* stations = l->getStations();
     auto* q = new std::queue<Event*>();
-    for (const auto &station : stations) {
-        q->push(MakeEvent(&Train::arriveAtStation, t, station, time));
-        time = (time + station.timeToNext) % (24 * 60);
-    }
+
+    int stopTime = time + 24 * 60;
+    int timeNoMod = time;
+    do {
+        std::vector<Station>::iterator iterF;
+        for (iterF = stations->begin(); iterF != stations->end(); iterF++) {
+            q->push(MakeEvent(&Train::arriveAtStation, t, *iterF, time));
+            time = (time + iterF->timeToNext) % (24 * 60);
+            timeNoMod += iterF->timeToNext;
+        }
+        std::vector<Station>::reverse_iterator iterR;
+        for (iterR = stations->rbegin(); iterR != stations->rend(); iterR++) {
+            q->push(MakeEvent(&Train::arriveAtStation, t, *iterR, time));
+            time = (time + iterR->timeToNext) % (24 * 60);
+            timeNoMod += iterR->timeToNext;
+        }
+    } while(timeNoMod < stopTime);
 
     return q;
 }
 
 
-void runSimulation(std::string lineName, int time) {
+std::vector<eventLog*> runSimulation(std::string lineName, int time) {
     Line* line = new Line(std::move(lineName));
-    auto* simTrain = new Train();
-    std::queue<Event*>* eventQueue = buildEventQueue(simTrain, line, time);
+    Train simTrain;
+    std::queue<Event*>* eventQueue = buildEventQueue(&simTrain, line, time);
 
     while (!eventQueue->empty()) {
         eventQueue->front()->Invoke();
         eventQueue->pop();
     }
+
+    return simTrain.getEventHist();
 }

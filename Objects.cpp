@@ -8,6 +8,18 @@
 #include <vector>
 #include <cmath>
 #include <iostream>
+#include <cstdlib>
+
+/*
+ * * * * * * * * * * * * * *
+ * MARTA Simulator         *
+ * ECE4122                 *
+ *                         *
+ * Toya Amechi             *
+ * Noah Roberts            *
+ * Jackson Sheu            *
+ * * * * * * * * * * * * * *
+ */
 
 using namespace std;
 
@@ -21,6 +33,9 @@ rpair morning = rpair(420, 540);
 rpair evening = rpair(960, 1140);
 float RUSH_ON_SCALING = 0.6;
 float RUSH_OFF_SCALING = 0.05;
+
+eventLog::eventLog(std::string stationName, int time, int numBoard, int numDeboard, int numPassengers) :
+        stationName(stationName), time(time), numBoard(numBoard), numDeboard(numDeboard), numPassengers(numPassengers) {}
 
 Train::Train() {
     numPassengers = 0;
@@ -57,6 +72,10 @@ void Train::arriveAtStation(Station& station, int time) {
         numOff -= numOff * abs(station.distFromCenter - MAX_DISTFROMCENTER / 2) / ((MAX_DISTFROMCENTER + 1) / 2) * 0.5;
     }
 
+    // added some randomness
+    numOff *= float(rand() % 40 + 80) / 100;
+    numOn *= float(rand() % 40 + 80) / 100;
+
     if (numOff > numPassengers) {
         numOff = numPassengers;
     }
@@ -67,12 +86,19 @@ void Train::arriveAtStation(Station& station, int time) {
         numOff = numPassengers;
     }
 
+    // log this particular event
+    eventHist.push_back(new eventLog(station.name, time, numOn, numOff, numPassengers));
+
     numPassengers = numPassengers - numOff + numOn;
-    cout << "Time: " << time << " numOn: " << numOn << " numOff: " << numOff << " numPassengers: " << numPassengers << " Name: " << station.name << endl;
+//    cout << "Time: " << time << " numOn: " << numOn << " numOff: " << numOff << " numPassengers: " << numPassengers << " Name: " << station.name << endl;
 }
 
 void Train::checkForDelay() {
 
+}
+
+std::vector<eventLog*> Train::getEventHist() {
+    return eventHist;
 }
 
 
@@ -205,6 +231,6 @@ void Line::genStations() {
     }
 }
 
-std::vector<Station> Line::getStations() {
-    return stations;
+vector<Station>* Line::getStations() {
+    return &stations;
 }

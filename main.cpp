@@ -1,14 +1,23 @@
 #include <iostream>
-#include <string>
-#include <utility>
-#include <map>
-#include <vector>
-#include <queue>
+#include <iomanip>
 #include "SimulatorDriver.h"
-#include "MakeEvent.h"
-#include "Objects.h"
 
 using namespace std;
+
+/*
+ * * * * * * * * * * * * * *
+ * MARTA Simulator         *
+ * ECE4122                 *
+ *                         *
+ * Toya Amechi             *
+ * Noah Roberts            *
+ * Jackson Sheu            *
+ * * * * * * * * * * * * * *
+ */
+
+//TODO: event support (ask user)
+//TODO: feedback structure
+//TODO: make numbers more believable
 
 string getLineNameInput() {
     // Take input and make sure it's valid.
@@ -54,11 +63,92 @@ int getTimeInput(const string &lineName) {
             cout << "Invalid time! Please enter a military time in the format HH:MM" << endl;
         } else {
             cin >> min;
-            time = hour * 60 + min;
+            if (0 <= hour && hour < 24 && 0 <= min && min < 60)
+                time = hour * 60 + min;
+            else
+                cout << "Invalid time! Please enter a military time in the format HH:MM" << endl;
         }
     } while (time == -1);
 
     return time;
+}
+
+// Display user feedback
+void giveFeedback(vector<eventLog*>* evH, string lineName) {
+    vector<eventLog*> &eventHist = *evH;
+
+    // For aggregating trips
+    eventLog* lastEvent;
+    int tripNum = 1;
+    int tripStationCount = 0;
+    int tripPassengerSum = 0;
+    int tripBoardSum = 0;
+    int tripDeboardSum = 0;
+    int tripStartTime = eventHist.front()->time;
+    string tripStart = eventHist.front()->stationName;
+
+    int stationCount = 0;
+    int passengerSum = 0;
+    int boardSum = 0;
+    int deboardSum = 0;
+
+    for (auto event : eventHist) {
+//        if (lastEvent->stationName == event->stationName) {
+//            cout << "Trip " << tripNum << ": " << tripStart << " ----> " << event->stationName << endl;
+//            cout << "   " << tripStartTime/60 << ":" << tripStartTime%60 << " to " << event->time/60 << ":" << event->time%60;
+//            cout << "   Passengers/station: " << (tripPassengerSum / tripStationCount);
+//            cout << "   Boarding passengers/station: " << (tripBoardSum / tripStationCount);
+//            cout << "   Deboarding passengers/station: " << (tripDeboardSum / tripStationCount) << endl;
+//
+//            tripNum++;
+//            tripStationCount = 0;
+//            tripPassengerSum = 0;
+//            tripBoardSum = 0;
+//            tripDeboardSum = 0;
+//            tripStartTime = event->time;
+//            tripStart = event->stationName;
+//        }
+//
+//        tripStationCount++;
+//        tripBoardSum += event->numBoard;
+//        tripDeboardSum += event->numDeboard;
+//        tripPassengerSum += event->numPassengers;
+//        lastEvent = event;
+
+        stationCount++;
+        boardSum += event->numBoard;
+        deboardSum += event->numDeboard;
+        passengerSum += event->numPassengers;
+    }
+
+    cout << "MARTA " << lineName << " Line 24 hour simulation results:" << endl;
+    cout << "   Passengers/station: " << (passengerSum / stationCount) << endl;
+    cout << "   Boarding passengers/station: " << (boardSum / stationCount) << endl;
+    cout << "   Deboarding passengers/station: " << (deboardSum / stationCount) << endl << endl;
+
+    cout << "Would you like to see the verbose output? (y/n)" << endl;
+    char input;
+    bool valid = true;
+    bool verbose;
+    do {
+        cin >> input;
+        if (input == 'y' || input == 'Y') {
+            verbose = true;
+            valid = true;
+        } else if (input == 'n' || input == 'N') {
+            verbose = false;
+            valid = true;
+        } else {
+            valid = false;
+            cout << "Uh oh! Please enter one of the following: y/n" << endl;
+        }
+    } while (!valid);
+
+    cout << "Verbose output:" << endl;
+    for (auto event : eventHist) {
+        cout << "Time: " << event->time << " numOn: " << event->numBoard << " numOff: " << event->numDeboard << " numPassengers: ";
+        cout << event->numPassengers << " Name: " << event->stationName << endl;
+    }
 }
 
 
@@ -74,7 +164,8 @@ int main() {
     int time = getTimeInput(lineName);
 
     cout << "Starting simulation..." << endl;
-    runSimulation(lineName, time);
+    vector<eventLog*> eventHist = runSimulation(lineName, time);
+    giveFeedback(&eventHist, lineName);
 
     return 0;
 }

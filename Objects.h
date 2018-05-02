@@ -8,6 +8,27 @@
 #include <string>
 #include <vector>
 
+/*
+ * * * * * * * * * * * * * *
+ * MARTA Simulator         *
+ * ECE4122                 *
+ *                         *
+ * Toya Amechi             *
+ * Noah Roberts            *
+ * Jackson Sheu            *
+ * * * * * * * * * * * * * *
+ */
+
+struct eventLog {
+    std::string stationName;
+    int time;
+    int numBoard;
+    int numDeboard;
+    int numPassengers; // on arrival
+
+    eventLog(std::string stationName="", int time=0, int numBoard=0, int numDeboard=0, int numPassengers=0);
+};
+
 class Station;
 
 class Train {
@@ -15,11 +36,13 @@ public:
     Train();
     void arriveAtStation(Station& station, int time);
     void checkForDelay();
+    std::vector<eventLog*> getEventHist();
 
 private:
     int numPassengers;
     double efficiencyGrade;
     int delay; // minutes
+    std::vector<eventLog*> eventHist;
 };
 
 
@@ -40,7 +63,7 @@ class Line {
 public:
     Line(std::string n, std::string ev = "", int start = -1, int stop = -1);
     void genStations();
-    std::vector<Station> getStations();
+    std::vector<Station>* getStations();
 
 private:
     std::string name;
