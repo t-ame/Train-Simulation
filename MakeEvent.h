@@ -85,7 +85,7 @@ Event* MakeEvent(MEM member, OBJ obj, T1 a1, T2 a2) {
                 m_function(m),
                 m_a(a),
                 m_b(b) {
-            std::cout << "EventMem2\n";
+//            std::cout << "EventMem2\n";
         }
     protected:
         void Notify() override {
