@@ -18,7 +18,6 @@ using namespace std;
 //TODO: event support
 //TODO: make numbers more believable
 //TODO: show more data to the user
-//TODO: make printing times prettier
 
 string getLineNameInput() {
     // Take input and make sure it's valid.
