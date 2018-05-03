@@ -19,11 +19,14 @@
  * * * * * * * * * * * * * *
  */
 
+
+int stopTime = 26 * 60;
+
+
 std::queue<Event*>* buildEventQueue(Train* t, Line* l, int time) {
     std::vector<Station>* stations = l->getStations();
     auto* q = new std::queue<Event*>();
 
-    int stopTime = time + 24 * 60;
     int timeNoMod = time;
     do {
         std::vector<Station>::iterator iterF;
@@ -44,8 +47,8 @@ std::queue<Event*>* buildEventQueue(Train* t, Line* l, int time) {
 }
 
 
-std::vector<eventLog*> runSimulation(std::string lineName, int time) {
-    Line* line = new Line(std::move(lineName));
+std::vector<eventLog*> runSimulation(std::string lineName, int time, std::string evStation, int start, int stop) {
+    Line* line = new Line(std::move(lineName),evStation, start, stop);
     Train simTrain;
     std::queue<Event*>* eventQueue = buildEventQueue(&simTrain, line, time);
 

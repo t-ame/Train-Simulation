@@ -111,8 +111,10 @@ Line::Line(string n, string ev, int start, int stop) {
     eventStation = ev;
     eventStart = start;
     eventStop = stop;
+    //initializeStations();
     genStations();
 }
+
 
 void Line::genStations() {
 
@@ -120,12 +122,13 @@ void Line::genStations() {
     typedef vector<spair> spairvec;
     map<string, spairvec> lineInfo;
 
+
     //to insert into map,
     //spairvec v = ….///line info
     //lineInfo[this->name] = v;
 
     // Hard code
-    spairvec red;
+    static spairvec red;
     red.push_back(spair("Airport", 2));
     red.push_back(spair("College Park", 3));
     red.push_back(spair("East Point", 3));
@@ -146,7 +149,7 @@ void Line::genStations() {
     red.push_back(spair("Sandy Springs", 2));
     red.push_back(spair("North Springs", 0));
 
-    spairvec gold;
+    static spairvec gold;
     gold.push_back(spair("Airport", 2));
     gold.push_back(spair("College Park", 3));
     gold.push_back(spair("East Point", 3));
@@ -166,7 +169,7 @@ void Line::genStations() {
     gold.push_back(spair("Chamblee", 3));
     gold.push_back(spair("Doraville", 0));
 
-    spairvec blue;
+    static spairvec blue;
     blue.push_back(spair("Hamilton E. Holmes", 3));
     blue.push_back(spair("West Lake", 3));
     blue.push_back(spair("Ashby", 1));
@@ -183,7 +186,7 @@ void Line::genStations() {
     blue.push_back(spair("Kensington", 2));
     blue.push_back(spair("Indian Creek", 0));
 
-    spairvec green;
+    static spairvec green;
     green.push_back(spair("Bankhead", 4));
     green.push_back(spair("Ashby", 1));
     green.push_back(spair("Vine City", 1));

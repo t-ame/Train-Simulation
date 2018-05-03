@@ -7,6 +7,9 @@
 
 #include <string>
 #include <vector>
+#include <map>
+
+using namespace std;
 
 /*
  * * * * * * * * * * * * * *
@@ -64,6 +67,9 @@ public:
     Line(std::string n, std::string ev = "", int start = -1, int stop = -1);
     void genStations();
     std::vector<Station>* getStations();
+    void initializeStations();
+
+    //static map<string, vector<pair<string, int> > > lineInfo;
 
 private:
     std::string name;
@@ -71,6 +77,7 @@ private:
     std::string eventStation;
     int eventStart;
     int eventStop;
+
 };
 
 
