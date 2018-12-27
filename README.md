@@ -1,5 +1,5 @@
 # Train Simulation
-## `This was a group project with each group member contributing to every aspect of the code`
+#### `This was a group project with each group member contributing to every aspect of the code`
 
 Officail documentation: https://docs.google.com/document/d/1TQnV_xkNiqZVAdHiBxkUaKbdTB2uMdcEr8sbEM-rQeg/edit?usp=sharing
 
